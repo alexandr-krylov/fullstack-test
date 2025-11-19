@@ -8,7 +8,6 @@ const editingTask = ref(null)
 const showForm = ref(false)
 const loading = ref(false)
 
-// Получение задач через store
 const fetchTasks = async () => {
   loading.value = true
   try {
@@ -18,19 +17,16 @@ const fetchTasks = async () => {
   }
 }
 
-// Создание новой задачи
 const createTask = () => {
   editingTask.value = null
   showForm.value = true
 }
 
-// Редактирование существующей задачи
 const editTask = (task) => {
   editingTask.value = task
   showForm.value = true
 }
 
-// Удаление задачи через store
 const deleteTask = async (task) => {
   if (!confirm('Удалить задачу?')) return
   try {
@@ -44,9 +40,9 @@ onMounted(fetchTasks)
 </script>
 
 <template>
-  <div>
+  <div class="task-card">
     <h1>Мои задачи</h1>
-    <button @click="createTask">Создать задачу</button>
+    <button @click="createTask" class="btn btn-primary">Создать задачу</button>
 
     <TaskForm 
       v-if="showForm" 
@@ -57,7 +53,7 @@ onMounted(fetchTasks)
 
     <div v-if="loading">Загрузка...</div>
 
-    <table v-if="!loading">
+    <table v-if="!loading" class="task-table">
       <thead>
         <tr>
           <th>Title</th>
@@ -75,13 +71,13 @@ onMounted(fetchTasks)
           <td>{{ task.title }}</td>
           <td>{{ task.status }}</td>
           <td>{{ task.priority }}</td>
-          <td>{{ task.due_date ?? '-' }}</td>
+          <td>{{ task.due_date?.slice(0, 10) || '-' }}</td>
           <td>{{ task.karada_project }}</td>
           <td>{{ task.importance_score }}</td>
           <td>{{ task.karada_test_label }}</td>
           <td>
-            <button @click="editTask(task)">Edit</button>
-            <button @click="deleteTask(task)">Delete</button>
+            <button @click="editTask(task)" class="btn btn-secondary">Edit</button>
+            <button @click="deleteTask(task)" class="btn btn-danger">Delete</button>
           </td>
         </tr>
       </tbody>

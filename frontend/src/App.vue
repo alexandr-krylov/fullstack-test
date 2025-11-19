@@ -102,9 +102,13 @@ const logout = async () => {
 /* ─────────────── CONTENT ─────────────── */
 .app-content {
   flex: 1;
+  width: 100%;
   padding: 2rem;
   display: flex;
-  justify-content: center;
+  justify-content: center; /* центрируем контент */
   align-items: flex-start;
+  background: #f6f9fc; /* ПОДЛОЖКА */
+  box-sizing: border-box;
 }
 </style>
+

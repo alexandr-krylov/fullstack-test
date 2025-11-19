@@ -22,8 +22,13 @@ class AuthController extends Controller
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
         ]);
-
-        return response()->json(['message' => 'User registered successfully']);
+        $token = $user->createToken('api-token')->plainTextToken;
+        
+        return response()->json([
+            'message' => 'User registered successfully',
+            'user' => $user,
+            'token' => $token,
+        ]);
     }
 
     public function login(Request $request)
@@ -39,12 +44,12 @@ class AuthController extends Controller
             return response()->json(['message' => 'Invalid credentials'], 401);
         }
 
-        // Логиним пользователя через сессии
-        Auth::login($user);
+        $token = $user->createToken('api-token')->plainTextToken;
 
         return response()->json([
             'message' => 'Logged in',
-            'user' => $user
+            'user' => $user,
+            'token' => $token,
         ]);
     }
 

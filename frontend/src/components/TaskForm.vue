@@ -9,7 +9,6 @@ const props = defineProps({
 const emit = defineEmits(['saved', 'cancel'])
 const taskStore = useTaskStore()
 
-// Форма
 const form = reactive({
   title: '',
   description: '',
@@ -20,23 +19,6 @@ const form = reactive({
 })
 
 const errors = ref({})
-
-// При открытии компонента — если есть task, заполняем
-watch(() => props.task, (task) => {
-  if (task) {
-    Object.assign(form, {
-      title: task.title,
-      description: task.description,
-      status: task.status,
-      priority: task.priority,
-      due_date: task.due_date ?? '',
-      karada_project: task.karada_project,
-    })
-  } else {
-    resetForm()
-  }
-  errors.value = {}
-})
 
 // Сброс
 const resetForm = () => {
@@ -49,6 +31,24 @@ const resetForm = () => {
     karada_project: 'karada_u',
   })
 }
+
+watch(() => props.task, (task) => {
+    if (task) {
+      Object.assign(form, {
+        title: task.title,
+        description: task.description,
+        status: task.status,
+        priority: task.priority,
+        due_date: task.due_date?.slice(0, 10) || '',
+        karada_project: task.karada_project,
+      })
+    } else {
+      resetForm()
+    }
+    errors.value = {}
+  }
+  , { immediate: true }
+)
 
 // Сохранение
 const saveTask = async () => {
@@ -76,7 +76,7 @@ const saveTask = async () => {
 </script>
 
 <template>
-  <div class="task-form">
+  <div class="form-group">
     <div>
       <label>Title</label>
       <input v-model="form.title" type="text">
@@ -122,10 +122,10 @@ const saveTask = async () => {
       <div v-if="errors.karada_project" class="error">{{ errors.karada_project[0] }}</div>
     </div>
 
-    <button @click="saveTask">
+    <button @click="saveTask" class="btn btn-danger">
       {{ props.task ? 'Update' : 'Create' }}
     </button>
 
-    <button @click="emit('cancel')">Cancel</button>
+    <button @click="emit('cancel')" class="btn btn-secondary">Cancel</button>
   </div>
 </template>

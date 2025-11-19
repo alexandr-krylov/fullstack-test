@@ -8,8 +8,7 @@ import router from './router'
 import axios from 'axios'
 // import { useAuthStore } from './stores/auth'
 
-axios.defaults.withCredentials = true
-axios.defaults.baseURL = 'http://localhost'
+axios.defaults.baseURL = 'http://localhost/api'
 
 const app = createApp(App)
 const pinia = createPinia()

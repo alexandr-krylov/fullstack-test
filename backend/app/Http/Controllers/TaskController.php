@@ -10,7 +10,6 @@ class TaskController extends Controller
 {
     public function index()
     {
-        dd(Auth::id());
         $tasks = Task::where('user_id', Auth::id())->get();
         return response()->json($tasks);
     }
