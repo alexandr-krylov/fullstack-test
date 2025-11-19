@@ -19,7 +19,6 @@ const router = createRouter({
 router.beforeEach(async (to) => {
   const auth = useAuthStore()
   
-  // Если мы ещё не загрузили пользователя — подгружаем
   if (!auth.user) {
     await auth.fetchUser()
   }
@@ -27,12 +26,10 @@ router.beforeEach(async (to) => {
   const isLoggedIn = !!auth.user
 
   if (to.meta.requiresAuth && !isLoggedIn) {
-    // Защищённая страница, но не залогинен
     return '/login'
   }
 
   if ((to.path === '/login' || to.path === '/register') && isLoggedIn) {
-    // Если пользователь залогинен — редиректим с login/register на рабочую страницу
     return '/dashboard'
   }
 })

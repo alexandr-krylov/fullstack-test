@@ -22,7 +22,13 @@ export const useAuthStore = defineStore('auth', {
             axios.defaults.headers.common['Authorization'] = `Bearer ${this.token}`
         },
         async logout() {
-            await axios.post('/logout', {})
+            try {
+                await axios.post('/logout', {})
+            } catch (e) {
+                if (e.response?.status !== 401) {
+                    console.error(e)
+                }
+            }
             this.user = null
             this.token = null
             localStorage.removeItem('token')
@@ -33,9 +39,19 @@ export const useAuthStore = defineStore('auth', {
                 this.user = null
                 return
             }
-            axios.defaults.headers.common['Authorization'] = `Bearer ${this.token}`
-            const res = await axios.get('/user')
-            this.user = res.data
+            try {
+                const res = await axios.get('/user')
+                this.user = res.data
+            } catch (e) {
+                if (e.response?.status === 401) {
+                    this.user = null
+                    this.token = null
+                    localStorage.removeItem('token')
+                    delete axios.defaults.headers.common['Authorization']
+                    return
+                }
+                throw e
+            }
         }
     }
 })

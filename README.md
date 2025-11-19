@@ -1,5 +1,8 @@
 # fullstack test  
-
+## software requirements  
+* docker
+* docker-compose
+* Manage Docker as a non-root user https://docs.docker.com/engine/install/linux-postinstall/ 
 ## how to run
 git clone https://github.com/alexandr-krylov/fullstack-test.git  
 cd fullstack-test  
